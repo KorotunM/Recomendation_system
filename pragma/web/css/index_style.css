@@ -1,0 +1,123 @@
+/* Основные стили */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f6fb;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+.header {
+    background-color: #ffffff;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    margin-right: 10px;
+    height: 80px;
+    width: 80px;
+    border-radius: 5px;
+}
+
+.navbar a {
+    margin-left: 15px;
+    color: #555;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.navbar a:hover {
+    color: #007bff;
+}
+
+/* Search Section */
+.search-section {
+    text-align: center;
+    padding: 40px;
+    background-color: #e6f0ff;
+    margin-top: 20px;
+}
+
+.search-section h2 {
+    font-size: 24px;
+    color: #004d99;
+    margin-bottom: 20px;
+}
+
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-form input[type="text"],
+.search-form select {
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox-group label {
+    font-size: 14px;
+    color: #333;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.clear-btn {
+    background-color: transparent;
+    color: #555;
+    border: none;
+    cursor: pointer;
+}
+
+.search-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+}
+
+.results-count {
+    font-size: 18px;
+    color: #004d99;
+    margin-top: 20px;
+}

@@ -1,0 +1,66 @@
+{{define "index"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Абитуриенту</title>
+    <link rel="stylesheet" href="/css/index_style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <img src="/assets/logo.jpg" alt="logo">
+                <h1>Абитуриенту</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <h2>Поиск вуза</h2>
+        <form method="GET" action="/universities?city=Москва" class="search-form">
+            <input type="text" name="city" placeholder="Город">
+            <input type="text" name="specialty" placeholder="Профессия">
+            <select name="form">
+                <option value="all">Все формы</option>
+                <option value="очная">Очная</option>
+                <option value="заочная">Заочная</option>
+            </select>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="dormitory" value="yes"> общежитие</label>
+                <label><input type="checkbox" name="military" value="yes"> военный учебный центр</label>
+            </div>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="budget" value="yes" checked> бюджет</label>
+                <label><input type="checkbox" name="paid" value="yes" checked> платное</label>
+            </div>
+            <div class="button-group">
+                <button type="reset" class="clear-btn">Очистить</button>
+                <button type="submit" class="search-btn">Найти</button>
+            </div>
+        </form>
+        <p class="results-count">
+            {{if .Universities}}
+                Найдено вузов: {{len .Universities}}
+            {{else}}
+                Вузы не найдены.
+            {{end}}
+        </p>
+    </section>
+
+    <!-- Universities Section -->
+    <section id="universities">
+        {{if gt (len .Universities) 0}}
+        {{range .Universities}}
+            {{template "university" .}}
+        {{end}}
+    {{else}}
+        <p>Нет результатов, соответствующих вашему запросу.</p>
+    {{end}}
+    </section>
+</body>
+</html>
+{{end}}
