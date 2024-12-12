@@ -16,11 +16,25 @@ type University struct {
 
 type PageData struct {
 	Universities []University
+	Subjects     []Subject
+	Errors       Errors
 	City         string
 	Specialty    string
 	Form         string
+	TotalScore   int
 	Dormitory    bool
 	Military     bool
 	Budget       bool
 	Paid         bool
+}
+
+type Subject struct {
+	Id   int
+	Name string
+}
+
+type Errors struct {
+	CityError      string
+	SpecialtyError string
+	ScoreError     string
 }

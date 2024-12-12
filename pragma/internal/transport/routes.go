@@ -3,15 +3,15 @@ package transport
 
 import (
 	"net/http"
+	"pragma/internal/transport/handlers"
 )
 
-// SetupRoutes инициализирует маршруты для веб-приложения
 func SetupRoutes() {
 	// Настройка маршрута для главной страницы
-	http.HandleFunc("/", IndexHandler)
+	http.HandleFunc("/", handlers.IndexHandler)
 
 	// Настройка маршрута для отображения университетов
-	http.HandleFunc("/universities", GetUniversitiesHandler)
+	http.HandleFunc("/universities", handlers.GetUniversitiesHandler)
 
 	// Настройка маршрутов для статических файлов (CSS, изображения и т.д.)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./web/css"))))
