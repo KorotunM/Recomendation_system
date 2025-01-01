@@ -16,7 +16,7 @@ func ConnectDB() {
 	var err error
 
 	// Открываем подключение к базе данных
-	DB, err = sql.Open("sqlite", "./data/RecomendationSystem.sqlite3") // Путь к базе данных
+	DB, err = sql.Open("sqlite", "./../data/RecomendationSystem.sqlite3") // Путь к базе данных
 	if err != nil {
 		log.Fatalf("Ошибка при открытии базы данных: %v", err)
 	}
