@@ -1,0 +1,88 @@
+{{define "university"}}
+
+<style>
+    .university-card {
+        display: flex;
+        flex-direction: column;
+        background-color: #FFFFFF;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .university-info {
+        margin-bottom: 15px;
+    }
+
+    .faculty-list, .direction-list {
+        padding-left: 20px;
+        margin-top: 10px;
+        display: none;
+    }
+
+    .toggle-button {
+        background-color: #003366;
+        color: #FFFFFF;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        margin-bottom: 5px;
+    }
+</style>
+
+<div class="university-list">
+    {{range $university := .Universities}}
+        <div class="university-card">
+            <div class="university-info">
+                <h2>{{$university.Name}} ({{$university.City}})</h2>
+                {{if $university.HasDormitory}}<span>Общежитие: Есть</span>{{else}}<span>Общежитие: Нет</span>{{end}} <br>
+                {{if $university.HasMilitary}}<span>Военная кафедра: Есть</span>{{else}}<span>Военная кафедра: Нет</span>{{end}}
+            </div>
+
+            <button class="toggle-button" onclick="toggleFaculties('{{$university.ID}}')">Показать факультеты</button>
+            
+            <div class="faculty-list" id="faculties-{{$university.ID}}" style="display: none;">
+                {{range $faculty := $.Faculties}}
+                    {{if eq $faculty.UniversityID $university.ID}}
+                        <div class="faculty-item">
+                            <h3>{{$faculty.Name}}</h3>
+                            <button class="toggle-button" onclick="toggleDirections('{{$faculty.ID}}')">+</button>
+
+                            <div class="direction-list" id="directions-{{$faculty.ID}}" style="display: none;">
+                                <ul>
+                                    {{range $direction := $.Directions}}
+                                        {{if eq $direction.FacultyID $faculty.ID}}
+                                            <li>
+                                                <strong>{{$direction.Name}}</strong> — 
+                                                Бюджет: {{$direction.MinScoreBudget}} баллов, 
+                                                Платно: {{$direction.MinScorePaid}} баллов, 
+                                                Стоимость: {{$direction.TuitionFee}} руб./год, 
+                                                Бюджетных мест: {{$direction.BudgetPlaces}}, 
+                                                Платных мест: {{$direction.PaidPlaces}}
+                                            </li>
+                                        {{end}}
+                                    {{end}}
+                                </ul>
+                            </div>
+                        </div>
+                    {{end}}
+                {{end}}
+            </div>
+        </div>
+    {{end}}
+</div>
+
+<script>
+    function toggleFaculties(universityID) {
+        const facultyList = document.getElementById(`faculties-${universityID}`);
+        facultyList.style.display = facultyList.style.display === "none" ? "block" : "none";
+    }
+
+    function toggleDirections(facultyID) {
+        const directionList = document.getElementById(`directions-${facultyID}`);
+        directionList.style.display = directionList.style.display === "none" ? "block" : "none";
+    }
+</script>
+
+{{end}}
