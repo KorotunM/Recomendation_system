@@ -16,4 +16,5 @@ func SetupRoutes() {
 	// Настройка маршрутов для статических файлов (CSS, изображения и т.д.)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./web/css"))))
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./web/assets"))))
+	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("./web/js"))))
 }
