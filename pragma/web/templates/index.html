@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/css/modal.css">
     <link rel="stylesheet" href="/css/university.css">
     <script src="/js/modal.js" defer></script>
+    <script src="/js/pagination.js" defer></script>
 </head>
 
 <body>
@@ -20,6 +21,14 @@
                 <img src="/assets/logo.jpg" alt="logo">
                 <h1>Абитуриенту</h1>
             </div>
+            <nav class="navigation-menu">
+                <ul>
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/compare">Сравнение</a></li>
+                    <li><a href="/favorites">Избранное</a></li>
+                    <li><a href="/history">История запросов</a></li>
+                </ul>
+            </nav>
             <button class="login-btn" onclick="openMainModal()">Войти / Зарегистрироваться</button>
         </div>
     </header>
@@ -146,13 +155,22 @@
     </section>
 
     <!-- Universities Section -->
-    <section id="universities">
+    <section class="university-list" id="university-list">
         {{if gt (len .Universities) 0}}
         {{template "university" $}}
         {{else}}
         <p class="no-results">Нет результатов, соответствующих вашему запросу.</p>
         {{end}}
     </section>
+
+    <div id="has-more" data-value="{{.HasMore}}"></div>
+    <div class="load-more-container">
+        {{if .HasMore}}
+        <button id="load-more" onclick="loadMore()">Загрузить ещё</button>
+        {{end}}
+    </div>
+
+
 
     <!-- Скрипт для работы кастомного выпадающего списка -->
     <script>

@@ -4,10 +4,13 @@ import (
 	"context"
 	"log"
 	"pragma/internal/models"
+	"strconv"
 )
 
-// GetFilteredUniversities - возвращает университеты с учётом базовых фильтров
-func GetFilteredUniversities(city string, dormitory, military bool) []models.University {
+const Limit = 4
+
+// GetFilteredUniversities - получение университетов с фильтрацией и пагинацией
+func GetFilteredUniversities(city string, dormitory, military bool, offset int) []models.University {
 	query := `
 		SELECT u.id, u.name, u.city, u.has_dormitory, u.has_military, r.rank_position
 		FROM universities u
@@ -16,11 +19,13 @@ func GetFilteredUniversities(city string, dormitory, military bool) []models.Uni
 	`
 
 	args := []interface{}{}
+	argIndex := 1
 
 	// Фильтр по городу
 	if city != "" {
-		query += " AND u.city ILIKE $1"
+		query += " AND u.city ILIKE $" + strconv.Itoa(argIndex)
 		args = append(args, "%"+city+"%")
+		argIndex++
 	}
 
 	// Фильтр по общежитию
@@ -33,35 +38,49 @@ func GetFilteredUniversities(city string, dormitory, military bool) []models.Uni
 		query += " AND u.has_military = true"
 	}
 
+	// Сортировка по рейтингу
 	query += " GROUP BY u.id, r.rank_position"
+	query += " ORDER BY r.rank_position ASC NULLS LAST, u.name ASC"
+
+	// Пагинация
+	query += " LIMIT $1 OFFSET $2"
+	args = append(args, Limit, offset)
 
 	// Выполнение запроса
 	rows, err := DB.Query(context.Background(), query, args...)
 	if err != nil {
-		log.Printf("Ошибка при выполнении запроса к университетам: %v", err)
+		log.Printf("Ошибка при выполнении запроса: %v", err)
 		return nil
 	}
 	defer rows.Close()
 
 	var universities []models.University
 
-	// Сканируем результат
+	// Сканирование данных
 	for rows.Next() {
 		var uni models.University
-		var rankPosition int
+		var rankPosition *int
 
-		err := rows.Scan(&uni.ID, &uni.Name, &uni.City, &uni.HasDormitory, &uni.HasMilitary, &rankPosition)
+		err := rows.Scan(
+			&uni.ID,
+			&uni.Name,
+			&uni.City,
+			&uni.HasDormitory,
+			&uni.HasMilitary,
+			&rankPosition,
+		)
 		if err != nil {
-			log.Printf("Ошибка при сканировании университета: %v", err)
+			log.Printf("Ошибка при сканировании данных: %v", err)
 			continue
 		}
 
-		uni.Rating = rankPosition
-		universities = append(universities, uni)
-	}
+		if rankPosition != nil {
+			uni.Rating = *rankPosition
+		} else {
+			uni.Rating = 0 // Университет без рейтинга
+		}
 
-	if err = rows.Err(); err != nil {
-		log.Printf("Ошибка при обработке строк университета: %v", err)
+		universities = append(universities, uni)
 	}
 
 	return universities

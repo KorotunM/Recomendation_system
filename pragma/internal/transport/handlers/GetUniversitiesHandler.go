@@ -21,6 +21,12 @@ func GetUniversitiesHandler(w http.ResponseWriter, r *http.Request) {
 	budget := r.URL.Query().Get("budget") == "yes"
 	paid := r.URL.Query().Get("paid") == "yes"
 
+	offsetParam := r.URL.Query().Get("offset")
+	offset, err := strconv.Atoi(offsetParam)
+	if err != nil || offset < 0 {
+		offset = 0
+	}
+
 	// Получение выбранных предметов
 	subjectIDs := r.URL.Query()["subjects"]
 	selectedSubjects := []int{}
@@ -32,6 +38,8 @@ func GetUniversitiesHandler(w http.ResponseWriter, r *http.Request) {
 			selectedSubjects = append(selectedSubjects, id)
 		}
 	}
+
+	log.Printf("Offset: %d", offset)
 
 	// Валидация данных
 	errors := service.ValidateInput(city, totalscoreStr)
@@ -68,7 +76,7 @@ func GetUniversitiesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Получение данных (университеты, факультеты, направления)
-	universities, faculties, directions := database.GetFilteredData(city, form, totalscore, dormitory, military, budget, paid, selectedSubjects)
+	universities, faculties, directions, hasMore := database.GetFilteredData(city, form, totalscore, dormitory, military, budget, paid, selectedSubjects, offset)
 
 	subjects := database.GetSubject()
 
@@ -86,6 +94,8 @@ func GetUniversitiesHandler(w http.ResponseWriter, r *http.Request) {
 		Budget:           budget,
 		Paid:             paid,
 		SelectedSubjects: selectedSubjects,
+		Offset:           offset,
+		HasMore:          hasMore,
 	}
 
 	// Загрузка шаблона

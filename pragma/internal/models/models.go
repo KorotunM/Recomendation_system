@@ -64,7 +64,9 @@ type PageData struct {
 	Military         bool         `json:"military"`
 	Budget           bool         `json:"budget"`
 	Paid             bool         `json:"paid"`
-	SelectedSubjects []int        `json:"selected_subjects"` // ID выбранных предметов
+	SelectedSubjects []int        `json:"selected_subjects"`
+	Offset           int
+	HasMore          bool
 }
 
 // Ошибки валидации
